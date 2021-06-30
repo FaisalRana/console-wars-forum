@@ -9,7 +9,7 @@ using ConsoleWarsForum.Models;
 
 namespace ConsoleWarsForum.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]")]   
     [ApiController]
     public class ThreadsController : ControllerBase
     {
@@ -31,7 +31,7 @@ namespace ConsoleWarsForum.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Thread>> GetThread(int id)
         {
-            var thread = await _context.Threads.FindAsync(id);
+            var thread = await _context.Threads.FindAsync(id);  //findasync is able to identify the primary key.  it knows not to use postsid because that is a foreign key
 
             if (thread == null)
             {
@@ -77,10 +77,11 @@ namespace ConsoleWarsForum.Controllers
         [HttpPost]
         public async Task<ActionResult<Thread>> PostThread(Thread thread)
         {
+            thread.DateAndTimeStamp = DateTime.Now;
             _context.Threads.Add(thread);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetThread", new { id = thread.ThreadId }, thread);
+            return CreatedAtAction("PostThread", new { id = thread.ThreadId }, thread);
         }
 
         // DELETE: api/Threads/5
